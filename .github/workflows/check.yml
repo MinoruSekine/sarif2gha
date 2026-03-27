@@ -1,0 +1,21 @@
+---
+
+name: Check typical behaviors
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  setup_sample_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: |
+          cd samples/
+          make -j all

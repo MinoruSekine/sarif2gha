@@ -1,0 +1,31 @@
+---
+
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  YAMLLint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v6
+
+      - name: YAMLLint
+        uses: karancode/yamllint-github-action@v3.0.0
+
+  markdown-lint:
+    name: Lint markdown files.
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: DavidAnson/markdownlint-cli2-action@v22.0.0
