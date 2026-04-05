@@ -53,8 +53,8 @@ class SarifLoader:
             case {"tool": {"driver": {"rules": [*rules]}}}:
                 for rule in rules:
                     match rule:
-                        case {"id": id}:
-                            rules_dict[id] = rule
+                        case {"id": rule_id}:
+                            rules_dict[rule_id] = rule
 
         return rules_dict
 
