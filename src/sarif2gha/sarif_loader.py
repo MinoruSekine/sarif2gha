@@ -142,7 +142,7 @@ class SarifLoader:
     def _adjust_origin_sarif_to_0(self, sarif_value: int | None) -> int | None:
         # Line and column in SARIF are 1-origin, but internal data are 0-origin.
         # And SARIF can omit each line and/or column field(s).
-        return max(sarif_value - 1, 0) if sarif_value is not None else None
+        return max(sarif_value - 1, 0) if isinstance(sarif_value, int) else None
 
     def _convert_level_to_severity(self, level: str) -> Severity:
         level_dict = {
