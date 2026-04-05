@@ -10,6 +10,18 @@ on:
   workflow_dispatch:
 
 jobs:
+  python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: astral-sh/setup-uv@v7.2.0
+
+      - run: |
+          uv sync
+          make -j ruff
+
   YAMLLint:
     runs-on: ubuntu-latest
 

@@ -1,6 +1,6 @@
 ---
 
-name: Check typical behaviors
+name: Tests
 
 on:
   pull_request:
@@ -10,12 +10,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup_sample_files:
+  pytest:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
 
+      - uses: astral-sh/setup-uv@v7.2.0
+
       - run: |
-          cd samples/
-          make -j all
+          uv sync
+          make -j test
