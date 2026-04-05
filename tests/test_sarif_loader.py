@@ -18,7 +18,7 @@ TESTS_DIR = Path(__file__).parent
 PROJECT_ROOT_DIR = TESTS_DIR.parent
 SAMPLES_DIR = PROJECT_ROOT_DIR / "samples"
 SARIF_FILE_EMPTY_LOG = SAMPLES_DIR / "empty-log.sarif.json"
-SARIF_FILE_RELEATED_LOCATIONS = SAMPLES_DIR / "bad-eval-related-locations.sarif"
+SARIF_FILE_RELATED_LOCATIONS = SAMPLES_DIR / "bad-eval-related-locations.sarif"
 SARIF_FILE_WITH_CODE_FLOW = SAMPLES_DIR / "bad-eval-with-code-flow.sarif"
 SARIF_FILE_SIMPLE_EXAMPLE = SAMPLES_DIR / "simple-example.sarif"
 NOT_EXISTING_FILE = SAMPLES_DIR / "not_existing.sarif"
@@ -48,7 +48,7 @@ def loader():
             )
         ),
         (
-            SARIF_FILE_RELEATED_LOCATIONS,
+            SARIF_FILE_RELATED_LOCATIONS,
             LoadSuccessData(
                 results=[
                     AnalysisResult(
