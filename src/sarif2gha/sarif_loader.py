@@ -43,7 +43,7 @@ class SarifLoader:
         try:
             with sarif_path.open(mode='r') as sarif_file:
                 sarif_json = json.load(sarif_file)
-        except Exception as e:
+        except (OSError, json.JSONDecodeError) as e:
             load_result = LoadFailureData(message=f"Failed to open {sarif_path}: {e}")
 
         if not isinstance(load_result, LoadFailureData):
