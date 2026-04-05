@@ -14,14 +14,14 @@ import pytest
 from sarif2gha.analysis_result import AnalysisResult, Severity
 from sarif2gha.sarif_loader import LoadFailureData, LoadSuccessData, SarifLoader
 
-TESTS_DIR = Path(__file__).parent
-PROJECT_ROOT_DIR = TESTS_DIR.parent
-SAMPLES_DIR = PROJECT_ROOT_DIR / "samples"
-SARIF_FILE_EMPTY_LOG = SAMPLES_DIR / "empty-log.sarif.json"
-SARIF_FILE_RELATED_LOCATIONS = SAMPLES_DIR / "bad-eval-related-locations.sarif"
-SARIF_FILE_WITH_CODE_FLOW = SAMPLES_DIR / "bad-eval-with-code-flow.sarif"
-SARIF_FILE_SIMPLE_EXAMPLE = SAMPLES_DIR / "simple-example.sarif"
-NOT_EXISTING_FILE = SAMPLES_DIR / "not_existing.sarif"
+_TESTS_DIR = Path(__file__).parent
+_PROJECT_ROOT_DIR = _TESTS_DIR.parent
+_SAMPLES_DIR = _PROJECT_ROOT_DIR / "samples"
+_SARIF_FILE_EMPTY_LOG = _SAMPLES_DIR / "empty-log.sarif.json"
+_SARIF_FILE_RELATED_LOCATIONS = _SAMPLES_DIR / "bad-eval-related-locations.sarif"
+_SARIF_FILE_WITH_CODE_FLOW = _SAMPLES_DIR / "bad-eval-with-code-flow.sarif"
+_SARIF_FILE_SIMPLE_EXAMPLE = _SAMPLES_DIR / "simple-example.sarif"
+_NOT_EXISTING_FILE = _SAMPLES_DIR / "not_existing.sarif"
 
 @pytest.fixture()
 def loader():
@@ -31,7 +31,7 @@ def loader():
     "sarif_path, expected",
     [
         (
-            SARIF_FILE_SIMPLE_EXAMPLE,
+            _SARIF_FILE_SIMPLE_EXAMPLE,
             LoadSuccessData(
                 results=[
                     AnalysisResult(
@@ -48,7 +48,7 @@ def loader():
             )
         ),
         (
-            SARIF_FILE_RELATED_LOCATIONS,
+            _SARIF_FILE_RELATED_LOCATIONS,
             LoadSuccessData(
                 results=[
                     AnalysisResult(
@@ -69,7 +69,7 @@ def loader():
             )
         ),
         (
-            SARIF_FILE_WITH_CODE_FLOW,
+            _SARIF_FILE_WITH_CODE_FLOW,
             LoadSuccessData(
                 results=[
                     AnalysisResult(
@@ -109,11 +109,11 @@ def test_sarif_loader(loader, sarif_path, expected):
 
 def test_sarif_loader_empty_log(loader):
     """Test for SARIF which includes empty log."""
-    loaded_data = loader.load(SARIF_FILE_EMPTY_LOG)
+    loaded_data = loader.load(_SARIF_FILE_EMPTY_LOG)
     assert isinstance(loaded_data, LoadSuccessData)
     results = loaded_data.results
     assert len(results) == 0
 
 def test_sarif_loader_not_existing_file(loader):
     """Test for not existing file."""
-    assert(isinstance(loader.load(NOT_EXISTING_FILE), LoadFailureData))
+    assert(isinstance(loader.load(_NOT_EXISTING_FILE), LoadFailureData))
