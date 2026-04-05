@@ -12,6 +12,7 @@ from enum import Enum, auto
 
 
 class Severity(Enum):
+    """Enum to indicate sevrity of each item."""
     ERROR = auto()
     WARNING = auto()
     NOTICE = auto()
@@ -19,6 +20,7 @@ class Severity(Enum):
 
 @dataclass
 class AnalysisResult:
+    """Structure for each item reported by external tools."""
     file: str = ""
     severity: Severity = Severity.UNKNOWN
     title: str | None = None

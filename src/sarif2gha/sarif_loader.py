@@ -16,14 +16,29 @@ from sarif2gha.analysis_result import AnalysisResult, Severity
 
 @dataclass
 class LoadSuccessData:
+    """Data structure for successful load."""
     results: list[AnalysisResult]
 
 @dataclass
 class LoadFailureData:
+    """Data structure for load failure."""
     message: str = ""
 
 class SarifLoader:
+    """Loads SARIF into list of internal data structures."""
+
     def load(self, sarif_path: Path) -> LoadSuccessData | LoadFailureData:
+        """
+        Loads SARIF into list of internal data structures.
+
+        Args:
+            sarif_path: SARIF file path to load.
+
+        Returns:
+            LoadSuccessData | LoadFailureData:
+                A LoadSuccessData object if the sarif_path is loaded correctly,
+                otherwise a LoadFailureData object containing details.
+        """
         load_result = None
         try:
             with sarif_path.open(mode='r') as sarif_file:
@@ -48,6 +63,7 @@ class SarifLoader:
         return load_result
 
     def _parse_rules_in_run(self, run):
+        """Parse rules in each item in "runs" field into dict."""
         rules_dict = {}
         match run:
             case {"tool": {"driver": {"rules": [*rules]}}}:
@@ -59,6 +75,7 @@ class SarifLoader:
         return rules_dict
 
     def _get_rule_short_desc(self, rules_dict, rule_id) -> str:
+        """Returns short description of the specified rule."""
         rule = rules_dict.get(rule_id)
         if rule is not None:
             match rule:
@@ -72,6 +89,7 @@ class SarifLoader:
         return short_desc
 
     def _parse_each_run(self, run, rules_dict) -> list[AnalysisResult]:
+        """Parse each item in "runs" field of SARIF."""
         # Parse failure at each run may mean just "no messages there".
         parsed_run = []
         match run:
@@ -87,6 +105,7 @@ class SarifLoader:
         result,
         rules_dict
     ) -> list[AnalysisResult]:
+        """Parse each items in "results" field of SARIF."""
         # Parse failure at each result may mean just "no messages there".
         parsed_result = []
         match result:
@@ -140,20 +159,40 @@ class SarifLoader:
         return parsed_result
 
     def _adjust_origin_sarif_to_0(self, sarif_value: int | None) -> int | None:
-        # Line and column in SARIF are 1-origin, but internal data are 0-origin.
-        # And SARIF can omit each line and/or column field(s).
+        """Adjust origin of line or column number in SARIF to 0-origin.
+
+        Line and column in SARIF are 1-origin, but internal data are 0-origin.
+        And SARIF can omit each line and/or column field(s).
+
+        Args:
+            sarif_value: Raw line or column value just loaded from SARIF, or None.
+
+        Returns:
+            int | None: 0-origin adjusted line or column value if sarif_value is int,
+                        None if sarif_value is None.
+        """
         return max(sarif_value - 1, 0) if isinstance(sarif_value, int) else None
 
     def _convert_level_to_severity(self, level: str) -> Severity:
+        """Convert "level" string in SARIF into internal severity enum.
+
+            Args:
+                level: "level" string in SARIF.
+
+            Returns:
+                Severity: Severity enum corresponding to arg level.
+
+            Note: In this implementation, unknown level will fallback to warning.
+        """
         level_dict = {
             'none': Severity.NOTICE,
             'note': Severity.NOTICE,
             'warning': Severity.WARNING,
             'error': Severity.ERROR
         }
-        # In this implementation, unknown level will fallback to warning.
         return level_dict.get(level, Severity.WARNING)
 
     def _convert_uri_to_file(self, uri: str) -> str:
+        """Convert "uri" field string to file path."""
         # TODO: Convert to project-root relative path.
         return uri

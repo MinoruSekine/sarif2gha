@@ -92,7 +92,8 @@ def loader():
     ]
 )
 
-def test_sarif_loader_simple_example(loader, sarif_path, expected):
+def test_sarif_loader(loader, sarif_path, expected):
+    """Parameterized tests for typical usages of SarifLoader."""
     loaded_data = loader.load(sarif_path)
     assert isinstance(loaded_data, LoadSuccessData)
     result = loaded_data.results[0]
@@ -107,10 +108,12 @@ def test_sarif_loader_simple_example(loader, sarif_path, expected):
     assert result.message == expected_result.message
 
 def test_sarif_loader_empty_log(loader):
+    """Test for SARIF which includes empty log."""
     loaded_data = loader.load(SARIF_FILE_EMPTY_LOG)
     assert isinstance(loaded_data, LoadSuccessData)
     results = loaded_data.results
     assert len(results) == 0
 
 def test_sarif_loader_not_existing_file(loader):
+    """Test for not existing file."""
     assert(isinstance(loader.load(NOT_EXISTING_FILE), LoadFailureData))
