@@ -35,7 +35,7 @@ class SarifLoader:
             # Parse error shouldn't be error, it may mean just "no messages".
             load_result = LoadSuccessData(results=[])
             match sarif_json:
-                case {"runs": runs}:
+                case {"runs": [*runs]}:
                     for run in runs:
                         rules_dict = self._parse_rules_in_run(run)
                         parsed_run = self._parse_each_run(run, rules_dict)
@@ -50,7 +50,7 @@ class SarifLoader:
     def _parse_rules_in_run(self, run):
         rules_dict = {}
         match run:
-            case {"tool": {"driver": {"rules": rules}}}:
+            case {"tool": {"driver": {"rules": [*rules]}}}:
                 for rule in rules:
                     match rule:
                         case {"id": id}:
@@ -75,7 +75,7 @@ class SarifLoader:
         # Parse failure at each run may mean just "no messages there".
         parsed_run = []
         match run:
-            case {"results": results}:
+            case {"results": [*results]}:
                 for result in results:
                     a_result = self._parse_each_result(result, rules_dict)
                     parsed_run += a_result
@@ -93,7 +93,7 @@ class SarifLoader:
             case {
                 "ruleId": rule_id,
                 "message": {"text": message_text},
-                "locations": locations
+                "locations": [*locations]
             }:
                 for location in locations:
                     match location:
