@@ -25,6 +25,7 @@ _NOT_EXISTING_FILE = _SAMPLES_DIR / "not_existing.sarif"
 
 @pytest.fixture()
 def loader():
+    """Construct test target loader instance."""
     return SarifLoader()
 
 @pytest.mark.parametrize(
