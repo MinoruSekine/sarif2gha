@@ -36,7 +36,7 @@ def encoder():
             'file=src/foo.py,line=8,col=3,endLine=9,endColumn=80,'
             'title=Warning title'
             '::Main message',
-            id='full_parameters'
+            id='warning_full_param'
         ),
         pytest.param(
             AnalysisResult(
@@ -53,7 +53,27 @@ def encoder():
             "file=Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
             "::'x' is assigned a value but never used.",
-            id='lack_ends'
+            id='error_without_any_ends'
+        ),
+        pytest.param(
+            AnalysisResult(
+                file='Beyond-basics/bad-eval.py',
+                severity=Severity.NOTICE,
+                start_line=2,
+                start_column=None,
+                end_line=None,
+                end_column=None,
+                title='PY2335',
+                message=(
+                    "Use of tainted variable 'expr' \n"
+                    "in the insecure function 'eval'."
+                )
+            ),
+            "::notice "
+            "file=Beyond-basics/bad-eval.py,line=3,"
+            "title=PY2335"
+            "::Use of tainted variable 'expr' %0Ain the insecure function 'eval'.",
+            id='notice_with_escape'
         )
     ]
 )
