@@ -34,12 +34,30 @@ class GitHubAnnotationEncoder:
                 if analysis_result.end_line < 0:
                     raise ValueError(
                         f"end_line must be >= 0 (actual:{analysis_result.end_line})")
+                if analysis_result.start_line > analysis_result.end_line:
+                    raise ValueError(
+                        f"end_line must be >= start_line "
+                        f"(actual: start:{analysis_result.start_line} "
+                        f"end:{analysis_result.end_line})")
                 encoded_str += f",endLine={analysis_result.end_line + 1}"
             if analysis_result.end_column is not None:
                 if analysis_result.end_column < 0:
                     raise ValueError(
                         f"end_column must be >= 0 "
                         f"(actual:{analysis_result.end_column})")
+                is_single_line = (
+                    analysis_result.end_line is None
+                    or analysis_result.start_line == analysis_result.end_line
+                )
+                if (
+                    is_single_line
+                    and analysis_result.start_column is not None
+                    and analysis_result.start_column > analysis_result.end_column
+                ):
+                    raise ValueError(
+                        f"end_column must be >= start_column if single line "
+                        f"(actual: start:{analysis_result.start_column} "
+                        f"end:{analysis_result.end_column})")
                 encoded_str += f",endColumn={analysis_result.end_column + 1}"
         if analysis_result.title is not None:
             encoded_str += f",title={self._encode_property_str(analysis_result.title)}"
