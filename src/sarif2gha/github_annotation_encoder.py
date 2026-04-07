@@ -59,23 +59,23 @@ class GitHubAnnotationEncoder:
 
     def _encode_property_str(self, src:str) -> str:
         """Encode as property string of GitHub workflow."""
-        PROPERTY_ESCAEPE_DICT = {
+        PROPERTY_ESCAPE_DICT = {
             '%': '%25',
             '\n': '%0A',
             '\r': '%0D',
             ',': '%2C',
             ':': '%3A'
         }
-        return self._escape_by_dict(src, PROPERTY_ESCAEPE_DICT)
+        return self._escape_by_dict(src, PROPERTY_ESCAPE_DICT)
 
     def _encode_data_str(self, src:str) -> str:
         """Encode as property string of GitHub workflow."""
-        PROPERTY_ESCAEPE_DICT = {
+        PROPERTY_ESCAPE_DICT = {
             '%': '%25',
             '\n': '%0A',
             '\r': '%0D',
         }
-        return self._escape_by_dict(src, PROPERTY_ESCAEPE_DICT)
+        return self._escape_by_dict(src, PROPERTY_ESCAPE_DICT)
 
     def _escape_by_dict(self, src: str, escape_dict) -> str:
         """Escape given str by escape_dict."""
