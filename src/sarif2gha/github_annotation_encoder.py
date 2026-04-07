@@ -38,7 +38,8 @@ class GitHubAnnotationEncoder:
             if analysis_result.end_column is not None:
                 if analysis_result.end_column < 0:
                     raise ValueError(
-                        f"end_column must be >= 0 (actual:{analysis_result.end_column})")
+                        f"end_column must be >= 0 "
+                        f"(actual:{analysis_result.end_column})")
                 encoded_str += f",endColumn={analysis_result.end_column + 1}"
         if analysis_result.title is not None:
             encoded_str += f",title={self._encode_property_str(analysis_result.title)}"
