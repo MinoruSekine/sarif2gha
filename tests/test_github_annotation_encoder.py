@@ -33,7 +33,7 @@ def encoder():
                 message='Main message'
             ),
             '::warning '
-            'file=src/foo.py,line=7,col=2,endLine=8,endColumn=79,'
+            'file=src/foo.py,line=8,col=3,endLine=9,endColumn=80,'
             'title=Warning title'
             '::Main message',
             id='full_parameters'
@@ -50,7 +50,7 @@ def encoder():
                 message="'x' is assigned a value but never used."
             ),
             "::error "
-            "file=Introduction/simple-example.js,line=0,col=4,"
+            "file=Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
             "::'x' is assigned a value but never used.",
             id='lack_ends'

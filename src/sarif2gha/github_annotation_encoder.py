@@ -19,13 +19,27 @@ class GitHubAnnotationEncoder:
         encoded_str = f"::{self._encode_severity(analysis_result.severity)} "
         encoded_str += f"file={self._encode_property_str(analysis_result.file)}"
         if analysis_result.start_line is not None:
-            encoded_str += f",line={analysis_result.start_line}"
-        if analysis_result.start_column is not None:
-            encoded_str += f",col={analysis_result.start_column}"
-        if analysis_result.end_line is not None:
-            encoded_str += f",endLine={analysis_result.end_line}"
-        if analysis_result.end_column is not None:
-            encoded_str += f",endColumn={analysis_result.end_column}"
+            if analysis_result.start_line < 0:
+                raise ValueError(
+                    f"start_line must be >= 0 (actual:{analysis_result.start_line})")
+            encoded_str += f",line={analysis_result.start_line + 1}"
+            # `col`, `endLine`, and `endColumn` have no meaning without `line`.
+            if analysis_result.start_column is not None:
+                if analysis_result.start_column < 0:
+                    raise ValueError(
+                        f"start_column must be >= 0 "
+                        f"(actual:{analysis_result.start_column})")
+                encoded_str += f",col={analysis_result.start_column + 1}"
+            if analysis_result.end_line is not None:
+                if analysis_result.end_line < 0:
+                    raise ValueError(
+                        f"end_line must be >= 0 (actual:{analysis_result.end_line})")
+                encoded_str += f",endLine={analysis_result.end_line + 1}"
+            if analysis_result.end_column is not None:
+                if analysis_result.end_column < 0:
+                    raise ValueError(
+                        f"end_column must be >= 0 (actual:{analysis_result.end_column})")
+                encoded_str += f",endColumn={analysis_result.end_column + 1}"
         if analysis_result.title is not None:
             encoded_str += f",title={self._encode_property_str(analysis_result.title)}"
         encoded_str += f"::{self._encode_data_str(analysis_result.message)}"
