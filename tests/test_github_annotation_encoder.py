@@ -40,7 +40,7 @@ def encoder():
         ),
         pytest.param(
             AnalysisResult(
-                file='Introduction/simple-example.js',
+                file='/C:/dev/sarif/sarif-tutorials/samples/Introduction/simple-example.js',
                 severity=Severity.ERROR,
                 start_line=0,
                 start_column=4,
@@ -50,7 +50,7 @@ def encoder():
                 message="'x' is assigned a value but never used."
             ),
             "::error "
-            "file=Introduction/simple-example.js,line=1,col=5,"
+            "file=/C%3A/dev/sarif/sarif-tutorials/samples/Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
             "::'x' is assigned a value but never used.",
             id='error_without_any_ends'

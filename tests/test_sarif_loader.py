@@ -36,7 +36,7 @@ def loader():
             LoadSuccessData(
                 results=[
                     AnalysisResult(
-                        file='',
+                        file='/C:/dev/sarif/sarif-tutorials/samples/Introduction/simple-example.js',
                         severity=Severity.ERROR,
                         start_line=0,
                         start_column=4,
@@ -53,7 +53,7 @@ def loader():
             LoadSuccessData(
                 results=[
                     AnalysisResult(
-                        file='',
+                        file='3-Beyond-basics/bad-eval.py',
                         # If level is absent in SARIF, its value SHALL be "warning".
                         severity=Severity.WARNING,
                         start_line=3,
@@ -74,7 +74,7 @@ def loader():
             LoadSuccessData(
                 results=[
                     AnalysisResult(
-                        file='',
+                        file='3-Beyond-basics/bad-eval-with-code-flow.py',
                         # If level is absent in SARIF, its value SHALL be "warning".
                         severity=Severity.WARNING,
                         start_line=7,
@@ -99,7 +99,7 @@ def test_sarif_loader(loader, sarif_path, expected):
     assert isinstance(loaded_data, LoadSuccessData)
     result = loaded_data.results[0]
     expected_result = expected.results[0]
-    assert len(result.file) > 1
+    assert result.file == expected_result.file
     assert result.severity == expected_result.severity
     assert result.start_line == expected_result.start_line
     assert result.start_column == expected_result.start_column
