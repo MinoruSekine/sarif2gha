@@ -10,6 +10,7 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 from sarif2gha.analysis_result import AnalysisResult, Severity
 
@@ -194,5 +195,14 @@ class SarifLoader:
 
     def _convert_uri_to_file(self, uri: str) -> str:
         """Convert "uri" field string to file path."""
-        # TODO: Convert to project-root relative path.
-        return uri
+        parsed_uri = urlparse(uri)
+        netloc = unquote(parsed_uri.netloc or "")
+        path = unquote(parsed_uri.path or "")
+        if netloc and netloc != 'localhost':
+            # Paths on external system will not work at following processes,
+            # but combine as UNC path here and don't refuse.
+            return f"//{netloc}/{path}"
+        # Normalize 'C:/foo/bar' to '/C:/foo/bar'
+        if len(path) >= 3 and path[0].isalpha() and path[1] == ':' and path[2] == '/':
+            path = '/' + path
+        return path
