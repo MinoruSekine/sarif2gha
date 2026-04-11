@@ -8,16 +8,29 @@
 # (at your option) any later version.
 
 import re
+from pathlib import PureWindowsPath
 
 from sarif2gha.analysis_result import AnalysisResult, Severity
 
 
 class GitHubAnnotationEncoder:
+    _normalized_project_root_dir: str
+
+    def __init__(self, project_root_dir_path: str):
+        """
+        Constructor.
+
+        Args:
+            project_root_dir_path: Project root dir to resolve paths in SARIF.
+        """
+        self._normalized_project_root_dir = self._normalize_dir(project_root_dir_path)
+
     """Encoder for GitHub Annotation style string from analysis data."""
     def encode(self, analysis_result: AnalysisResult) -> str:
         """Encode GitHub Annotation string from AnalysisResult instance."""
         encoded_str = f"::{self._encode_severity(analysis_result.severity)} "
-        encoded_str += f"file={self._encode_property_str(analysis_result.file)}"
+        file = self._resolve_as_project_root_relative_path(analysis_result.file)
+        encoded_str += f"file={self._encode_property_str(file)}"
         if analysis_result.start_line is not None:
             if analysis_result.start_line < 0:
                 raise ValueError(
@@ -99,3 +112,22 @@ class GitHubAnnotationEncoder:
         """Escape given str by escape_dict."""
         re_obj = re.compile("|".join(re.escape(key) for key in escape_dict))
         return re_obj.sub(lambda m: escape_dict[m.group(0)], src)
+
+    def _normalize_dir(self, dir: str) -> str:
+        """Normalize given dir string.
+
+        * Path delimiters are unified into '/'
+        * Starting with '/' for absolute path, even if for Windows path ('/C:/foo/bar/')
+        * Ending with '/'
+        """
+        path = PureWindowsPath(dir)
+        normalized_dir = path.as_posix()
+        if path.is_absolute() and not normalized_dir.startswith('/'):
+            normalized_dir = '/' + normalized_dir
+        return normalized_dir.rstrip('/') + '/'
+
+    def _resolve_as_project_root_relative_path(self, path: str) -> str:
+        """Resolve path as project root relative if project root dir is specified."""
+        if self._normalized_project_root_dir is None:
+            return path
+        return path.removeprefix(self._normalized_project_root_dir)
