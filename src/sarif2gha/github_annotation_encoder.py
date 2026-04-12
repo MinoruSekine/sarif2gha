@@ -28,6 +28,11 @@ class GitHubAnnotationEncoder:
     """Encoder for GitHub Annotation style string from analysis data."""
     def encode(self, analysis_result: AnalysisResult) -> str:
         """Encode GitHub Annotation string from AnalysisResult instance."""
+        if '\\' in analysis_result.file:
+            raise ValueError(
+                f"analysis_result.file must use forward slashes, "
+                f"got: {analysis_result.file!r}"
+            )
         encoded_str = f"::{self._encode_severity(analysis_result.severity)} "
         file = self._resolve_as_project_root_relative_path(analysis_result.file)
         encoded_str += f"file={self._encode_property_str(file)}"
