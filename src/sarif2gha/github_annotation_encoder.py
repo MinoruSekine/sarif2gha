@@ -23,7 +23,11 @@ class GitHubAnnotationEncoder:
         Args:
             project_root_dir_path: Project root dir to resolve paths in SARIF.
         """
-        self._normalized_project_root_dir = self._normalize_dir(project_root_dir_path)
+        self._normalized_project_root_dir = (
+            self._normalize_dir(project_root_dir_path)
+            if project_root_dir_path
+            else None
+        )
 
     """Encoder for GitHub Annotation style string from analysis data."""
     def encode(self, analysis_result: AnalysisResult) -> str:
@@ -125,6 +129,9 @@ class GitHubAnnotationEncoder:
         * Starting with '/' for absolute path, even if for Windows path ('/C:/foo/bar/')
         * Ending with '/'
         """
+        # Just return given value if it is None or empty string.
+        if not dir:
+            return dir
         path = PureWindowsPath(dir)
         normalized_dir = path.as_posix()
         if path.is_absolute() and not normalized_dir.startswith('/'):
@@ -133,6 +140,6 @@ class GitHubAnnotationEncoder:
 
     def _resolve_as_project_root_relative_path(self, path: str) -> str:
         """Resolve path as project root relative if project root dir is specified."""
-        if self._normalized_project_root_dir is None:
+        if not self._normalized_project_root_dir:
             return path
         return path.removeprefix(self._normalized_project_root_dir)
