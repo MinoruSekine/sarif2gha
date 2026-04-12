@@ -13,13 +13,8 @@ from sarif2gha.analysis_result import AnalysisResult, Severity
 from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
 
 
-@pytest.fixture()
-def encoder():
-    """Construct test target encoder instance."""
-    return GitHubAnnotationEncoder()
-
 @pytest.mark.parametrize(
-    "analysis_result, expected_str",
+    "analysis_result, project_root_dir, expected_str",
     [
         pytest.param(
             AnalysisResult(
@@ -32,6 +27,7 @@ def encoder():
                 title='Warning title',
                 message='Main message'
             ),
+            '',
             '::warning '
             'file=src/foo.py,line=8,col=3,endLine=9,endColumn=80,'
             'title=Warning title'
@@ -49,8 +45,9 @@ def encoder():
                 title='disallow unused variables',
                 message="'x' is assigned a value but never used."
             ),
+            'C:\\dev\\sarif\\sarif-tutorials',
             "::error "
-            "file=/C%3A/dev/sarif/sarif-tutorials/samples/Introduction/simple-example.js,line=1,col=5,"
+            "file=samples/Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
             "::'x' is assigned a value but never used.",
             id='error_without_any_ends'
@@ -69,8 +66,9 @@ def encoder():
                     "in the insecure function 'eval'."
                 )
             ),
+            'Beyond-basics',
             "::notice "
-            "file=Beyond-basics/bad-eval.py,line=3,"
+            "file=bad-eval.py,line=3,"
             "title=PY2335"
             "::Use of tainted variable 'expr' %0Ain the insecure function 'eval'.",
             id='notice_with_escape'
@@ -78,7 +76,11 @@ def encoder():
     ]
 )
 
-def test_github_annotation_encoder(encoder, analysis_result, expected_str):
+def test_github_annotation_encoder(
+        analysis_result,
+        project_root_dir,
+        expected_str):
     """Parameterized tests for typical usages of GitHubAnnotationEncoder."""
+    encoder = GitHubAnnotationEncoder(project_root_dir)
     encoded_str = encoder.encode(analysis_result)
     assert encoded_str == expected_str
