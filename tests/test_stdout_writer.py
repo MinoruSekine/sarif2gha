@@ -28,6 +28,35 @@ from sarif2gha.stdout_writer import StdoutWriter
             "file=samples/Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
             "::'x' is assigned a value but never used."
+        ),
+        (
+            "::notice "
+            "file=bad-eval.py,line=3,"
+            "title=PY2335"
+            "::Use of tainted variable 'expr' %0Ain the insecure function 'eval'."
+        ),
+        (
+            ''
+        ),
+        (
+            "::notice "
+            "::very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "very very very very very very very very "
+            "long string test"
         )
     ]
 )
