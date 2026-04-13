@@ -7,8 +7,6 @@
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-from unittest.mock import patch
-
 import pytest
 
 from sarif2gha.stdout_writer import StdoutWriter
@@ -62,11 +60,10 @@ from sarif2gha.stdout_writer import StdoutWriter
 )
 
 
-def test_stdout_writer(src_str):
+def test_stdout_writer(capsys, src_str):
     """Tests for typical usage of StdoutWriter."""
     writer = StdoutWriter()
-    with patch('sys.stdout.write') as mock_write:
-        writer.write(src_str)
+    writer.write(src_str)
 
-        expected_str = src_str + '\n'
-        mock_write.assert_called_once_with(expected_str)
+    captured = capsys.readouterr()
+    assert captured.out == src_str + '\n'
