@@ -13,3 +13,6 @@ import sys
 class StdoutWriter:
     def write(self, src_str: str):
         sys.stdout.write(f"{src_str}\n")
+        # Flushing will help log processing by GitHub.
+        sys.stdout.flush()
+
