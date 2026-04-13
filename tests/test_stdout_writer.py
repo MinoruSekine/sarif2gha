@@ -34,6 +34,7 @@ from sarif2gha.stdout_writer import StdoutWriter
 
 
 def test_stdout_writer(src_str):
+    """Tests for typical usage of StdoutWriter."""
     writer = StdoutWriter()
     with patch('sys.stdout.write') as mock_write:
         writer.write(src_str)

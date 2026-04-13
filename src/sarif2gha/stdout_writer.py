@@ -12,6 +12,14 @@ import sys
 
 class StdoutWriter:
     def write(self, src_str: str):
+        """Write the given string to stdout with a trailing newline.
+
+        This method always appends '\\n' at the end of the output,
+        similar to the built-in print() function.
+
+        Args:
+            src_str: A string to write.
+        """
         sys.stdout.write(f"{src_str}\n")
         # Flushing will help log processing by GitHub.
         sys.stdout.flush()
