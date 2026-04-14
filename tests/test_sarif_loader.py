@@ -11,8 +11,13 @@ from pathlib import Path
 
 import pytest
 
-from sarif2gha.analysis_result import AnalysisResult, Severity
-from sarif2gha.sarif_loader import LoadFailureData, LoadSuccessData, SarifLoader
+from sarif2gha.analysis_result import (
+    AnalysisResult,
+    LoadFailureData,
+    LoadSuccessData,
+    Severity,
+)
+from sarif2gha.sarif_loader import SarifLoader
 
 _TESTS_DIR = Path(__file__).parent
 _PROJECT_ROOT_DIR = _TESTS_DIR.parent

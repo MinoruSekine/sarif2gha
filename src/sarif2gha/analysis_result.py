@@ -29,3 +29,13 @@ class AnalysisResult:
     start_column: int | None = None
     end_line: int | None = None
     end_column: int | None = None
+
+@dataclass
+class LoadSuccessData:
+    """Data structure for successful load."""
+    results: list[AnalysisResult]
+
+@dataclass
+class LoadFailureData:
+    """Data structure for load failure."""
+    message: str = ""

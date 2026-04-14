@@ -8,22 +8,16 @@
 # (at your option) any later version.
 
 import json
-from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-from sarif2gha.analysis_result import AnalysisResult, Severity
+from sarif2gha.analysis_result import (
+    AnalysisResult,
+    LoadFailureData,
+    LoadSuccessData,
+    Severity,
+)
 
-
-@dataclass
-class LoadSuccessData:
-    """Data structure for successful load."""
-    results: list[AnalysisResult]
-
-@dataclass
-class LoadFailureData:
-    """Data structure for load failure."""
-    message: str = ""
 
 class SarifLoader:
     """Loads SARIF into list of internal data structures."""
