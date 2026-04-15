@@ -77,9 +77,10 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
 )
 
 def test_github_annotation_encoder(
-        analysis_result,
-        project_root_dir,
-        expected_str):
+        analysis_result: AnalysisResult,
+        project_root_dir: str,
+        expected_str: str
+) -> None:
     """Parameterized tests for typical usages of GitHubAnnotationEncoder."""
     encoder = GitHubAnnotationEncoder(project_root_dir)
     encoded_str = encoder.encode(analysis_result)

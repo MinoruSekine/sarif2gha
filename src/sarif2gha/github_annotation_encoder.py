@@ -14,9 +14,10 @@ from sarif2gha.analysis_result import AnalysisResult, Severity
 
 
 class GitHubAnnotationEncoder:
-    _normalized_project_root_dir: str
+    """Encoder for GitHub Annotation style string from analysis data."""
+    _normalized_project_root_dir: str | None
 
-    def __init__(self, project_root_dir_path: str):
+    def __init__(self, project_root_dir_path: str) -> None:
         """
         Constructor.
 
@@ -29,7 +30,6 @@ class GitHubAnnotationEncoder:
             else None
         )
 
-    """Encoder for GitHub Annotation style string from analysis data."""
     def encode(self, analysis_result: AnalysisResult) -> str:
         """Encode GitHub Annotation string from AnalysisResult instance."""
         if '\\' in analysis_result.file:
@@ -86,7 +86,7 @@ class GitHubAnnotationEncoder:
         encoded_str += f"::{self._encode_data_str(analysis_result.message)}"
         return encoded_str
 
-    def _encode_severity(self, severity:Severity):
+    def _encode_severity(self, severity:Severity) -> str:
         """Encode severity enum into GitHub Annotation string."""
         SEVERITY_STRINGIFY_DICT = {
             Severity.ERROR: 'error',
@@ -117,7 +117,7 @@ class GitHubAnnotationEncoder:
         }
         return self._escape_by_dict(src, PROPERTY_ESCAPE_DICT)
 
-    def _escape_by_dict(self, src: str, escape_dict) -> str:
+    def _escape_by_dict(self, src: str, escape_dict:dict[str, str]) -> str:
         """Escape given str by escape_dict."""
         re_obj = re.compile("|".join(re.escape(key) for key in escape_dict))
         return re_obj.sub(lambda m: escape_dict[m.group(0)], src)

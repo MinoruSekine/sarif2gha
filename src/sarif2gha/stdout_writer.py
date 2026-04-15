@@ -11,7 +11,7 @@ import sys
 
 
 class StdoutWriter:
-    def write(self, src_str: str):
+    def write(self, src_str: str) -> None:
         """Write the given string to stdout with a trailing newline.
 
         This method always appends '\\n' at the end of the output,

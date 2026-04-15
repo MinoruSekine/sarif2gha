@@ -29,7 +29,7 @@ _SARIF_FILE_SIMPLE_EXAMPLE = _SAMPLES_DIR / "simple-example.sarif"
 _NOT_EXISTING_FILE = _SAMPLES_DIR / "not_existing.sarif"
 
 @pytest.fixture()
-def loader():
+def loader() -> SarifLoader:
     """Construct test target loader instance."""
     return SarifLoader()
 
@@ -37,7 +37,7 @@ def loader():
     "sarif_path, expected",
     [
         (
-            _SARIF_FILE_SIMPLE_EXAMPLE,
+            Path(_SARIF_FILE_SIMPLE_EXAMPLE),
             LoadSuccessData(
                 results=[
                     AnalysisResult(
@@ -54,7 +54,7 @@ def loader():
             )
         ),
         (
-            _SARIF_FILE_RELATED_LOCATIONS,
+            Path(_SARIF_FILE_RELATED_LOCATIONS),
             LoadSuccessData(
                 results=[
                     AnalysisResult(
@@ -75,7 +75,7 @@ def loader():
             )
         ),
         (
-            _SARIF_FILE_WITH_CODE_FLOW,
+            Path(_SARIF_FILE_WITH_CODE_FLOW),
             LoadSuccessData(
                 results=[
                     AnalysisResult(
@@ -98,7 +98,11 @@ def loader():
     ]
 )
 
-def test_sarif_loader(loader, sarif_path, expected):
+def test_sarif_loader(
+        loader: SarifLoader,
+        sarif_path: Path,
+        expected: LoadSuccessData
+) -> None:
     """Parameterized tests for typical usages of SarifLoader."""
     loaded_data = loader.load(sarif_path)
     assert isinstance(loaded_data, LoadSuccessData)
@@ -113,13 +117,13 @@ def test_sarif_loader(loader, sarif_path, expected):
     assert result.title == expected_result.title
     assert result.message == expected_result.message
 
-def test_sarif_loader_empty_log(loader):
+def test_sarif_loader_empty_log(loader: SarifLoader) -> None:
     """Test for SARIF which includes empty log."""
     loaded_data = loader.load(_SARIF_FILE_EMPTY_LOG)
     assert isinstance(loaded_data, LoadSuccessData)
     results = loaded_data.results
     assert len(results) == 0
 
-def test_sarif_loader_not_existing_file(loader):
+def test_sarif_loader_not_existing_file(loader: SarifLoader) -> None:
     """Test for not existing file."""
     assert(isinstance(loader.load(_NOT_EXISTING_FILE), LoadFailureData))

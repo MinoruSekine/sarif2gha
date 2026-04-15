@@ -8,15 +8,35 @@
 # (at your option) any later version.
 
 from pathlib import Path
+from typing import Protocol
 
-from sarif2gha.analysis_result import LoadFailureData, LoadSuccessData
+from sarif2gha.analysis_result import (
+    AnalysisResult,
+    LoadFailureData,
+    LoadSuccessData,
+)
 
+
+class Loader(Protocol):
+    def load(self, sarif_path: Path) -> LoadSuccessData | LoadFailureData: ...
+
+class Encoder(Protocol):
+    def encode(self, analysis_result: AnalysisResult) -> str: ...
+
+class Writer(Protocol):
+    def write(self, src_str: str) -> None: ...
 
 class ConversionContext:
     """Context to convert analysis input to output."""
     _sarif_path: Path
 
-    def __init__(self, sarif_path: Path, loader, encoder, writer):
+    def __init__(
+            self,
+            sarif_path: Path,
+            loader: Loader,
+            encoder: Encoder,
+            writer: Writer
+    ) -> None:
         """Contructor."""
         self._sarif_path = sarif_path
         self._loader = loader

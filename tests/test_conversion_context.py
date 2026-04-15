@@ -133,7 +133,7 @@ from sarif2gha.conversion_context import ConversionContext
             id='several-results'
         ),
         pytest.param(
-            "samples/load_failure_data.sarif",
+            Path("samples/load_failure_data.sarif"),
             LoadFailureData(
                 message="Load failed."
             ),
@@ -145,10 +145,10 @@ from sarif2gha.conversion_context import ConversionContext
 
 
 def test_conversion_context(
-        src_sarif_file_path,
-        analysis_results,
-        encoded_strs
-):
+        src_sarif_file_path: Path,
+        analysis_results: LoadSuccessData | LoadFailureData,
+        encoded_strs: list[str]
+) -> None:
     """Tests for ConversionContext."""
     # Setup mocks.
     mock_loader = MagicMock()
