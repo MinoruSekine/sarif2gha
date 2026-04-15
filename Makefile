@@ -5,11 +5,14 @@ clean: samples-clean
 	$(RM) -r .pytest_cache .ruff_cache
 	find . -type d -name __pycache__ -exec $(RM) -r {} +
 
-lint: ruff
+lint: ruff mypy
 
 test: pytest
 
 # Each specific targets.
+mypy:
+	uv run mypy .
+
 pytest: samples
 	uv run pytest
 
@@ -22,4 +25,4 @@ samples:
 samples-clean:
 	cd samples && $(MAKE) clean
 
-.PHONY: all clean lint test pytest ruff samples samples-clean
+.PHONY: all clean lint test mypy pytest ruff samples samples-clean
