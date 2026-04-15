@@ -60,7 +60,7 @@ from sarif2gha.stdout_writer import StdoutWriter
 )
 
 
-def test_stdout_writer(capsys, src_str):
+def test_stdout_writer(capsys: pytest.CaptureFixture[str], src_str: str) -> None:
     """Tests for typical usage of StdoutWriter."""
     writer = StdoutWriter()
     writer.write(src_str)

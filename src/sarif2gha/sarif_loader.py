@@ -9,6 +9,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 from urllib.parse import unquote, urlparse
 
 from sarif2gha.analysis_result import (
@@ -34,7 +35,7 @@ class SarifLoader:
                 A LoadSuccessData object if the sarif_path is loaded correctly,
                 otherwise a LoadFailureData object containing details.
         """
-        load_result = None
+        load_result : LoadFailureData | LoadSuccessData | None = None
         try:
             with sarif_path.open(mode='r') as sarif_file:
                 sarif_json = json.load(sarif_file)
@@ -57,7 +58,7 @@ class SarifLoader:
 
         return load_result
 
-    def _parse_rules_in_run(self, run):
+    def _parse_rules_in_run(self, run: dict[Any, Any]) -> dict[str, Any]:
         """Parse rules in each item in "runs" field into dict."""
         rules_dict = {}
         match run:
@@ -69,8 +70,9 @@ class SarifLoader:
 
         return rules_dict
 
-    def _get_rule_short_desc(self, rules_dict, rule_id) -> str:
+    def _get_rule_short_desc(self, rules_dict: dict[str, Any], rule_id: str) -> str:
         """Returns short description of the specified rule."""
+        short_desc : str
         rule = rules_dict.get(rule_id)
         if rule is not None:
             match rule:
@@ -83,7 +85,11 @@ class SarifLoader:
 
         return short_desc
 
-    def _parse_each_run(self, run, rules_dict) -> list[AnalysisResult]:
+    def _parse_each_run(
+            self,
+            run: dict[Any, Any],
+            rules_dict: dict[str, Any]
+    ) -> list[AnalysisResult]:
         """Parse each item in "runs" field of SARIF."""
         # Parse failure at each run may mean just "no messages there".
         parsed_run = []
@@ -97,8 +103,8 @@ class SarifLoader:
 
     def _parse_each_result(
         self,
-        result,
-        rules_dict
+        result: dict[Any, Any],
+        rules_dict: dict[str, Any]
     ) -> list[AnalysisResult]:
         """Parse each items in "results" field of SARIF."""
         # Parse failure at each result may mean just "no messages there".
