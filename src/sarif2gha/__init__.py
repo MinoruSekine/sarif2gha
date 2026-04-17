@@ -35,7 +35,6 @@ def _parse_commandline_arguments() -> argparse.Namespace:
 
     argparser.add_argument(
         'sarif_path',
-        nargs=1,
         type=Path,
         help='Input SARIF path.'
     )
@@ -48,7 +47,7 @@ def main() -> int:
     loader = SarifLoader()
     encoder = GitHubAnnotationEncoder(args.project_root_dir)
     writer = StdoutWriter()
-    context = ConversionContext(args.sarif_path[0], loader, encoder, writer)
+    context = ConversionContext(args.sarif_path, loader, encoder, writer)
     conversion_result = context.run()
     if conversion_result is None:
         return _EXIT_CODE_OK
