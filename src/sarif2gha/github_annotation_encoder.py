@@ -8,7 +8,7 @@
 # (at your option) any later version.
 
 import re
-from pathlib import PureWindowsPath
+from pathlib import Path, PureWindowsPath
 
 from sarif2gha.analysis_result import AnalysisResult, Severity
 
@@ -17,7 +17,7 @@ class GitHubAnnotationEncoder:
     """Encoder for GitHub Annotation style string from analysis data."""
     _normalized_project_root_dir: str | None
 
-    def __init__(self, project_root_dir_path: str) -> None:
+    def __init__(self, project_root_dir_path: Path | None) -> None:
         """
         Constructor.
 
@@ -122,16 +122,15 @@ class GitHubAnnotationEncoder:
         re_obj = re.compile("|".join(re.escape(key) for key in escape_dict))
         return re_obj.sub(lambda m: escape_dict[m.group(0)], src)
 
-    def _normalize_dir(self, dir: str) -> str:
+    def _normalize_dir(self, dir: Path | None) -> str | None:
         """Normalize given dir string.
 
         * Path delimiters are unified into '/'
         * Starting with '/' for absolute path, even if for Windows path ('/C:/foo/bar/')
         * Ending with '/'
         """
-        # Just return given value if it is None or empty string.
-        if not dir:
-            return dir
+        if dir is None:
+            return None
         path = PureWindowsPath(dir)
         normalized_dir = path.as_posix()
         if path.is_absolute() and not normalized_dir.startswith('/'):
