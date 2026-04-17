@@ -7,6 +7,8 @@
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
+from pathlib import Path
+
 import pytest
 
 from sarif2gha.analysis_result import AnalysisResult, Severity
@@ -27,7 +29,7 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
                 title='Warning title',
                 message='Main message'
             ),
-            '',
+            None,
             '::warning '
             'file=src/foo.py,line=8,col=3,endLine=9,endColumn=80,'
             'title=Warning title'
@@ -45,7 +47,7 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
                 title='disallow unused variables',
                 message="'x' is assigned a value but never used."
             ),
-            'C:\\dev\\sarif\\sarif-tutorials',
+            Path('C:\\dev\\sarif\\sarif-tutorials'),
             "::error "
             "file=samples/Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
@@ -66,7 +68,7 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
                     "in the insecure function 'eval'."
                 )
             ),
-            'Beyond-basics',
+            Path('Beyond-basics'),
             "::notice "
             "file=bad-eval.py,line=3,"
             "title=PY2335"
@@ -78,7 +80,7 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
 
 def test_github_annotation_encoder(
         analysis_result: AnalysisResult,
-        project_root_dir: str,
+        project_root_dir: Path | None,
         expected_str: str
 ) -> None:
     """Parameterized tests for typical usages of GitHubAnnotationEncoder."""
