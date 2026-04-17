@@ -24,11 +24,7 @@ class GitHubAnnotationEncoder:
         Args:
             project_root_dir_path: Project root dir to resolve paths in SARIF.
         """
-        self._normalized_project_root_dir = (
-            self._normalize_dir(project_root_dir_path)
-            if project_root_dir_path
-            else None
-        )
+        self._normalized_project_root_dir = self._normalize_dir(project_root_dir_path)
 
     def encode(self, analysis_result: AnalysisResult) -> str:
         """Encode GitHub Annotation string from AnalysisResult instance."""
