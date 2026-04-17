@@ -16,6 +16,9 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
 from sarif2gha.sarif_loader import SarifLoader
 from sarif2gha.stdout_writer import StdoutWriter
 
+_EXIT_CODE_OK = 0
+_EXIT_CODE_CONVERSION_ERROR = 1
+
 
 def _parse_commandline_arguments() -> argparse.Namespace:
     """Parse CLI arguments."""
@@ -48,6 +51,6 @@ def main() -> int:
     context = ConversionContext(args.sarif_path[0], loader, encoder, writer)
     conversion_result = context.run()
     if conversion_result is None:
-        return 0
+        return _EXIT_CODE_OK
     sys.stderr.write(f"{conversion_result}\n")
-    return -1
+    return _EXIT_CODE_CONVERSION_ERROR
