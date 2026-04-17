@@ -47,7 +47,7 @@ from sarif2gha.github_annotation_encoder import GitHubAnnotationEncoder
                 title='disallow unused variables',
                 message="'x' is assigned a value but never used."
             ),
-            'C:\\dev\\sarif\\sarif-tutorials',
+            Path('C:\\dev\\sarif\\sarif-tutorials'),
             "::error "
             "file=samples/Introduction/simple-example.js,line=1,col=5,"
             "title=disallow unused variables"
