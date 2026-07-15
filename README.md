@@ -34,3 +34,9 @@ jobs:
           --project-root-dir="${{ github.workspace }}" psscriptanalyzer.sarif
         shell: pwsh
 ```
+
+## Screenshots
+
+### GitHub Annotations from `psscriptanalyzer-action` via `sarif2gha`
+
+![Screenshot with `psscriptanalyzer-action`](./doc/screenshot_psscriptanalyzeraction.png)
