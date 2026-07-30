@@ -1,0 +1,40 @@
+---
+
+name: Gather SARIF files by PSScriptAnalyzerAction
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  psscriptanalyzer:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: microsoft/psscriptanalyzer-action@v1.1
+        with:
+          path: ./samples/pwsh
+          recurse: true
+          output: results_${{ matrix.os }}.sarif
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: results_${{ matrix.os }}.sarif
+
+      - name: Confirm GITHUB_WORKSPACE env var on bash.
+        shell: bash
+        run: |
+          echo "github.workspace is ${{ github.workspace }}".
+          echo "GITHUB_WORKSPACE is $GITHUB_WORKSPACE on bash."
+
+      - name: Confirm GITHUB_WORKSPACE env var on pwsh.
+        shell: pwsh
+        run: |
+          echo "github.workspace is ${{ github.workspace }}".
+          echo "GITHUB_WORKSPACE is $env:GITHUB_WORKSPACE on pwsh."
